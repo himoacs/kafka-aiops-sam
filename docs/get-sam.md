@@ -11,8 +11,6 @@ current terms).
 > ([Using the SAM CLI with the Desktop Installation](https://docs.solace.com/Agent-Mesh/Framework/installing/desktop.htm)).
 > If a step differs on your machine, trust Solace's page and tell us.
 
-Solace's page says the desktop app runs entirely on your machine. This repo asks nothing more of you to run SAM itself.
-
 ## Step 1. Install the desktop app
 
 1. Open <https://solace.com/products/agent-mesh/download/>, fill in the short form, and download the installer for

@@ -12,6 +12,16 @@ Point them at the Kafka cluster, Prometheus and log store **you already run**, t
 This repo does **not** deploy Kafka, Prometheus or Loki. It contains only the agents and the MCP servers that
 connect them to what you have.
 
+## About Solace Agent Mesh (SAM)
+
+[Solace Agent Mesh](https://solace.com/products/agent-mesh/) is an agent runtime and development platform. It makes
+creating agents, and giving them access to MCP servers, skills and tools, extremely simple. It also includes several
+out-of-the-box integrations and triggers, such as Slack, WhatsApp, Teams and webhooks, so the same agents can be
+reached from the places your team already works.
+
+This repo uses SAM as the runtime: the agents, skills and connectors here are SAM resources, and the MCP servers
+are what SAM's agents call to reach your Kafka, metrics and logs.
+
 ## What gets deployed
 
 ![Architecture: SAM orchestrator and agents connected through MCP servers to Kafka, Prometheus, Loki, institutional knowledge and Kafka docs](docs/images/architecture.png)
@@ -41,7 +51,7 @@ The same flow as text:
 | 3 MCP servers | read-only access to Kafka, Prometheus and Loki, run with Docker Compose | `mcp/` |
 | Reference configs | what the skills assume about your metrics and logs. **Not deployed.** | `reference/` |
 
-You supply: a Kafka cluster, a Prometheus with Kafka metrics, optionally a Loki with Kafka logs, and SAM with an LLM already configured. Nothing here needs a message broker of your own.
+You supply: a Kafka cluster, a Prometheus with Kafka metrics, optionally a Loki with Kafka logs, and SAM with an LLM already configured.
 
 ## Quickstart (about 15 minutes)
 
