@@ -7,6 +7,7 @@
 #   scripts/apply.sh --with-slack          also deploy the Slack entrypoint (needs tokens in sam/.env)
 #   scripts/apply.sh --with-models         also create the general and planning models (only if your SAM has no LLM configured)
 #   scripts/apply.sh --sam-home PATH       the desktop app runs with a custom SAM home (SAM_HOME) instead of the default
+#   scripts/apply.sh --allow-overwrite     proceed even if the plan would change resources this repo did not create
 #   scripts/apply.sh --plan                show the plan only, change nothing
 #   scripts/apply.sh --yes                 skip the confirmation prompt
 #
@@ -14,7 +15,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SAMDIR="$ROOT/sam"
-TARGET=(--target desktop); SLACK=0; MODELS=0; PLAN_ONLY=0; YES=0; HOMEARG=()
+TARGET=(--target desktop); SLACK=0; MODELS=0; ALLOW=0; PLAN_ONLY=0; YES=0; HOMEARG=()
 while [ $# -gt 0 ]; do
   case "$1" in
     --target) TARGET=(--target "$2"); shift 2;;
@@ -22,9 +23,10 @@ while [ $# -gt 0 ]; do
     --sam-home) HOMEARG=(--sam-home "$2"); shift 2;;
     --with-slack) SLACK=1; shift;;
     --with-models) MODELS=1; shift;;
+    --allow-overwrite) ALLOW=1; shift;;
     --plan) PLAN_ONLY=1; shift;;
     --yes|-y) YES=1; shift;;
-    -h|--help) sed -n '2,15p' "$0"; exit 0;;
+    -h|--help) sed -n '2,16p' "$0"; exit 0;;
     *) echo "unknown option: $1 (try --help)" >&2; exit 2;;
   esac
 done
@@ -74,13 +76,28 @@ done
 # 4. Plan, confirm, apply.
 cd "$SAMDIR"
 echo; echo "== Plan (nothing is changed yet) =="
-if ! "$CLI" config apply -m "$MANIFEST" "${TARGET[@]}" ${HOMEARG[@]+"${HOMEARG[@]}"} ${ENVARG[@]+"${ENVARG[@]}"} --dry-run; then
+PLANOUT="$(mktemp)"; trap 'rm -f "$PLANOUT"' EXIT
+if ! "$CLI" config apply -m "$MANIFEST" "${TARGET[@]}" ${HOMEARG[@]+"${HOMEARG[@]}"} ${ENVARG[@]+"${ENVARG[@]}"} --dry-run >"$PLANOUT" 2>&1; then
+  grep -v 'level=' "$PLANOUT" >&2 || true
   echo >&2
   echo "The plan failed. If the message says no running SAM desktop app was found:" >&2
   echo "  - open the SAM desktop app and wait until its window has loaded, then retry;" >&2
   echo "  - if the app runs with a custom SAM_HOME, pass it: scripts/apply.sh --sam-home <path>;" >&2
   echo "  - or pass the app's address directly: scripts/apply.sh --url http://127.0.0.1:8800" >&2
   exit 1
+fi
+grep -v 'level=' "$PLANOUT"
+# Safety: this repo only creates resources whose names start with kafka_ / kafka- (or acme-kafka-). If the plan would UPDATE
+# anything else, that resource already exists in your SAM under the same name and would be overwritten. Stop unless told otherwise.
+# (--with-models intentionally updates general and planning.)
+collide=$(grep -E '^\s+~\s+\S+\s+update' "$PLANOUT" | awk '{print $2}' | grep -v -E '^(kafka[-_]|acme-kafka-)' || true)
+if [ $MODELS -eq 1 ]; then collide=$(printf '%s\n' "$collide" | grep -v -E '^(general|planning)$' || true); fi
+if [ -n "$collide" ] && [ $ALLOW -ne 1 ]; then
+  echo >&2
+  echo "STOPPED: applying would overwrite existing resources that this repo did not create:" >&2
+  printf '  - %s\n' $collide >&2
+  echo "Rename the conflicting resources in sam/ or in your SAM, or re-run with --allow-overwrite if you really mean it." >&2
+  exit 3
 fi
 if [ $PLAN_ONLY -eq 1 ]; then exit 0; fi
 if [ $YES -ne 1 ]; then

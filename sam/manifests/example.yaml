@@ -9,17 +9,17 @@ variables:
 resources:
   connectors:
     - kafka_mcp
-    - prometheus
-    - loki
+    - kafka_prometheus
+    - kafka_loki
   skills:
     - kafka-docs
     - kafka-health-check
-    - consumer-lag-troubleshoot
+    - kafka-consumer-lag-troubleshoot
     - acme-kafka-knowledge
     - kafka-metrics-queries
     - kafka-log-queries
     - kafka-cluster-queries
-    - response-citations
+    - kafka-response-citations
   agents:
     - kafka_orchestrator_agent
     - kafka_metrics_agent

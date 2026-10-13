@@ -1,5 +1,5 @@
 kind: connector
-name: loki
+name: kafka_loki
 description: "Loki MCP server - run LogQL queries over Kafka broker, controller and client application logs; discover labels, label values and log streams."
 spec:
   type: mcp

@@ -54,7 +54,7 @@ managed service). Compare names, then edit the skills:
 2. For each row of the table, find your equivalent (the JMX bean names in the Kafka docs are in
    `sam/skills/kafka-docs/references/operations/monitoring.md`).
 3. Replace the names in `sam/skills/kafka-metrics-queries/SKILL.md` (and the few uses in
-   `kafka-health-check` and `consumer-lag-troubleshoot`), update the **Site-specific values** paragraph (cluster
+   `kafka-health-check` and `kafka-consumer-lag-troubleshoot`), update the **Site-specific values** paragraph (cluster
    label, job names), then re-run `scripts/apply.sh`.
 Many Strimzi-style names are close to ours but not identical; check each one rather than assume.
 

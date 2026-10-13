@@ -102,7 +102,7 @@ Cite each documented fact with the file and the URL it came from:
 [Source: kafka-docs 4.2 · grep_skill_resources | file=reference/topic-configs.md, pattern=^## min.insync.replicas | url=https://kafka.apache.org/42/configuration/topic-configs/#topicconfigs_min.insync.replicas]
 ```
 
-Use `read_skill_resource` as the tool name when you read the file instead of searching it. Follow the general rules in `response-citations`.
+Use `read_skill_resource` as the tool name when you read the file instead of searching it. Follow the general rules in `kafka-response-citations`.
 
 ---
 

@@ -34,7 +34,7 @@ spec:
     - **Docs are not the cluster.** You give documented defaults and semantics.
       You do NOT know what this cluster is configured with; for live state,
       tell the operator to ask the cluster, metrics or log specialists.
-    - **Load `response-citations` before finalizing** and cite every documented
+    - **Load `kafka-response-citations` before finalizing** and cite every documented
       fact with the file and the kafka.apache.org URL.
     - Label recommendations that the docs do not state as recommendations.
     - Use concrete examples (CLI commands, config snippets) when they add
@@ -79,7 +79,7 @@ spec:
 
   skillRefs:
     - kafka-docs
-    - response-citations
+    - kafka-response-citations
   skillIds: []
   toolsets:
     - builtin_web_request_tools

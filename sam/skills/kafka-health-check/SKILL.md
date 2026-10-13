@@ -62,5 +62,5 @@ Do not invent thresholds; when unsure, show the numbers and say what you could n
 ## Rules
 
 - Never skip the cluster-vs-docs split: documented defaults come from the Expert agent, live values from Cluster Agent.
-- Load `response-citations`; preserve specialist citations verbatim.
+- Load `kafka-response-citations`; preserve specialist citations verbatim.
 - Be concise: lead with the verdict, then evidence.

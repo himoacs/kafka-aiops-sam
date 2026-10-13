@@ -73,4 +73,4 @@ Use an instant query for "now", a range query for a trend. Default window: last 
 3. **Broker id mapping:** a value in `kafka_topic_partition_leader` is a broker id, not a host. Map ids to hosts with `list_brokers` (cluster agent) or the `instance` label of the broker JMX series; do not guess.
 4. Per-partition series are large. Aggregate (`sum by (topic)`, `topk`) unless asked for partitions.
 5. Report numbers with units and the time window. Do not diagnose; give the evidence.
-6. Load `response-citations` before finalizing; cite the tool, the PromQL and the range.
+6. Load `kafka-response-citations` before finalizing; cite the tool, the PromQL and the range.

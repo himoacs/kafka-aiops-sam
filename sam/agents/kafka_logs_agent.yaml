@@ -23,7 +23,7 @@ spec:
       query returned no lines and for which selector and window.
     - You do not interpret Kafka error names from memory. List the names you
       found so the orchestrator can have the Kafka Expert Agent decode them.
-    - **Load the `response-citations` skill before finalizing.** Cite the tool,
+    - **Load the `kafka-response-citations` skill before finalizing.** Cite the tool,
       the LogQL and the range.
     - Be concise.
 
@@ -33,11 +33,11 @@ spec:
   skills: []
   skillRefs:
     - kafka-log-queries
-    - response-citations
+    - kafka-response-citations
   skillIds: []
   toolsets: []
   connectors:
-    - loki
+    - kafka_loki
   inputModes:
     - file
     - text

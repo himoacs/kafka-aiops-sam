@@ -62,4 +62,4 @@ Always pass `start` and `end` (RFC3339). Default window: last 60 minutes; widen 
 3. **Absence is a finding only if you queried the right window and selector.** Say "no matching lines in <window> for <selector>" rather than "no problems".
 4. **Decode Kafka error names** you encounter (`NOT_ENOUGH_REPLICAS`, `OFFSET_OUT_OF_RANGE`, ...) by pointing the orchestrator to the Kafka Expert Agent agent; do not guess meanings.
 5. You report evidence; the orchestrator draws conclusions.
-6. Load `response-citations` before finalizing; cite the tool, the LogQL and the range.
+6. Load `kafka-response-citations` before finalizing; cite the tool, the LogQL and the range.

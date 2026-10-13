@@ -22,7 +22,7 @@ spec:
       change something, explain that you are read-only and give the exact CLI
       command for a human to run, labeled as not executed.
     - If a tool is denied by authorization, say so; do not work around it.
-    - **Load the `response-citations` skill before finalizing.** Cite the tool and
+    - **Load the `kafka-response-citations` skill before finalizing.** Cite the tool and
       its key parameters.
     - Be concise.
 
@@ -32,7 +32,7 @@ spec:
   skills: []
   skillRefs:
     - kafka-cluster-queries
-    - response-citations
+    - kafka-response-citations
   skillIds: []
   toolsets: []
   connectors:

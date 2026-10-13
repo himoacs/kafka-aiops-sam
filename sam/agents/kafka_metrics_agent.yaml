@@ -22,7 +22,7 @@ spec:
     - Counters (`*_count`, `*_total`) need `rate` or `increase`.
     - If a query returns nothing, check the metric name with `list_metrics`
       and say whether the metric is missing or the value is zero.
-    - **Load the `response-citations` skill before finalizing.** Every finding
+    - **Load the `kafka-response-citations` skill before finalizing.** Every finding
       carries a citation with the tool, the PromQL and the range.
     - Be concise; do not include information that was not asked for.
 
@@ -32,11 +32,11 @@ spec:
   skills: []
   skillRefs:
     - kafka-metrics-queries
-    - response-citations
+    - kafka-response-citations
   skillIds: []
   toolsets: []
   connectors:
-    - prometheus
+    - kafka_prometheus
   inputModes:
     - file
     - text

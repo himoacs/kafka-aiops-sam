@@ -1,5 +1,5 @@
 kind: connector
-name: prometheus
+name: kafka_prometheus
 description: "Prometheus MCP server - run instant and range PromQL queries over Kafka broker, KRaft controller, consumer-lag and host metrics, list metrics and metadata, inspect scrape targets and firing alerts."
 spec:
   type: mcp

@@ -1,5 +1,5 @@
 ---
-name: consumer-lag-troubleshoot
+name: kafka-consumer-lag-troubleshoot
 description: >-
   Diagnosis procedure for "consumer lag is high / growing / my consumer is not
   keeping up": separates a slow consumer from a stuck consumer, a rebalance, no

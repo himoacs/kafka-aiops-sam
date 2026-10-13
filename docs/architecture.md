@@ -7,17 +7,17 @@ each other; the orchestrator combines their evidence into one answer.
 
 | Agent | Data source | Connector | Skills it loads |
 |---|---|---|---|
-| `kafka_orchestrator_agent` | none directly | none | `kafka-health-check`, `consumer-lag-troubleshoot`, `acme-kafka-knowledge` (example), `response-citations` |
-| `kafka_cluster_agent` | live cluster state: brokers, topics, partitions, ISR, configs, consumer groups and lag | `kafka_mcp` | `kafka-cluster-queries`, `response-citations` |
-| `kafka_metrics_agent` | Prometheus: broker, controller, lag, disk metrics, firing alerts | `prometheus` | `kafka-metrics-queries`, `response-citations` |
-| `kafka_logs_agent` | Loki: broker, controller and client logs | `loki` | `kafka-log-queries`, `response-citations` |
-| `kafka_expert_agent` | the Apache Kafka 4.2 docs (config defaults, error codes, metrics, procedures) and the live web for KIPs and JIRA | built-in web tool | `kafka-docs`, `response-citations` |
+| `kafka_orchestrator_agent` | none directly | none | `kafka-health-check`, `kafka-consumer-lag-troubleshoot`, `acme-kafka-knowledge` (example), `kafka-response-citations` |
+| `kafka_cluster_agent` | live cluster state: brokers, topics, partitions, ISR, configs, consumer groups and lag | `kafka_mcp` | `kafka-cluster-queries`, `kafka-response-citations` |
+| `kafka_metrics_agent` | Prometheus: broker, controller, lag, disk metrics, firing alerts | `kafka_prometheus` | `kafka-metrics-queries`, `kafka-response-citations` |
+| `kafka_logs_agent` | Loki: broker, controller and client logs | `kafka_loki` | `kafka-log-queries`, `kafka-response-citations` |
+| `kafka_expert_agent` | the Apache Kafka 4.2 docs (config defaults, error codes, metrics, procedures) and the live web for KIPs and JIRA | built-in web tool | `kafka-docs`, `kafka-response-citations` |
 
 ## A typical flow
 
 *"`payments-consumer` fell behind between 11:00 and 11:15. Slow, stuck, or a rebalance?"*
 
-1. The orchestrator loads `consumer-lag-troubleshoot`, a playbook that separates the three causes by lag trend,
+1. The orchestrator loads `kafka-consumer-lag-troubleshoot`, a playbook that separates the three causes by lag trend,
    committed-offset movement, group state and rebalance log lines.
 2. It asks the metrics agent for lag and offset series over the window, the logs agent for rebalance lines from
    the broker logs, and the cluster agent for the group's current state.
@@ -33,9 +33,9 @@ each other; the orchestrator combines their evidence into one answer.
 | `kafka-log-queries` | LogQL mechanics, the label contract, query patterns, how to read auth lines |
 | `kafka-cluster-queries` | how to read the cluster tools, config sources, proposed-command rules |
 | `kafka-health-check` | a "how is the cluster?" checklist with judgement rules to avoid false alarms |
-| `consumer-lag-troubleshoot` | slow vs stuck vs rebalancing |
+| `kafka-consumer-lag-troubleshoot` | slow vs stuck vs rebalancing |
 | `kafka-docs` | Apache Kafka 4.2 docs as searchable files; rules for citing them |
-| `response-citations` | the citation format |
+| `kafka-response-citations` | the citation format |
 | `acme-kafka-knowledge` | **example** institutional knowledge ([customize-knowledge.md](customize-knowledge.md)) |
 
 Skills use progressive disclosure: a short `SKILL.md` routes to larger reference files that the agent searches

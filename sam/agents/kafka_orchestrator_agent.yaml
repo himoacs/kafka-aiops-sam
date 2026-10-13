@@ -52,7 +52,7 @@ spec:
 
     ## Procedures (load the skill before delegating)
     - Health or "is anything wrong" questions: load `kafka-health-check`.
-    - Consumer lag / "my consumer is not keeping up": load `consumer-lag-troubleshoot`.
+    - Consumer lag / "my consumer is not keeping up": load `kafka-consumer-lag-troubleshoot`.
 
     ## Acme institutional knowledge
     Load `acme-kafka-knowledge` whenever the question involves **who owns** a topic
@@ -75,7 +75,7 @@ spec:
     the error actually points to.
 
     ## Citations
-    Load the `response-citations` skill before finalizing any answer. Specialists
+    Load the `kafka-response-citations` skill before finalizing any answer. Specialists
     attach `[Source: ...]` citations to their findings; preserve every citation
     verbatim next to wherever that finding appears in your answer. If a claim is
     your own inference across findings, say so in plain prose instead of inventing
@@ -133,9 +133,9 @@ spec:
 
   skillRefs:
     - kafka-health-check
-    - consumer-lag-troubleshoot
+    - kafka-consumer-lag-troubleshoot
     - acme-kafka-knowledge
-    - response-citations
+    - kafka-response-citations
   skillIds: []
   toolsets: []
   connectors: []

@@ -5,6 +5,7 @@
 | Symptom | Cause and fix |
 |---|---|
 | "--target desktop: no running SAM desktop app found" | Open the desktop app and wait for its window to load, then retry. If the app runs with a custom `SAM_HOME`, pass `--sam-home <path>`; or pass the app's address with `--url http://127.0.0.1:8800`. An old `sam` on your `PATH` can also be the cause; the script prefers the app's own CLI, and you can force one with `SAM_CLI=/path/to/sam`. |
+| "STOPPED: applying would overwrite existing resources..." | The plan would update a resource in your SAM that this repo did not create (same name). Every resource this repo ships is named `kafka_*`, `kafka-*` or `acme-kafka-*` to avoid this, so the listed name is one of yours with a clashing name. Rename it, or if you are sure, re-run with `--allow-overwrite`. Nothing is changed when this stops. |
 | "Could not find the sam CLI" | Install the SAM desktop app and see [get-sam.md](get-sam.md) step 2, or set `SAM_CLI=/path/to/sam`. |
 | JSON decode error from `sam config ...` | CLI older or newer than the SAM server. Use the CLI that matches your SAM version (the one bundled with your SAM install). |
 | "Set these in sam/.env first" | Only needed with `--with-models` (LLM settings) or `--with-slack` (tokens): copy `sam/.env.example` to `sam/.env` and fill in the listed variables. |

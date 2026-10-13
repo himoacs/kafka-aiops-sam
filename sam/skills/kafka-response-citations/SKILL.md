@@ -1,5 +1,5 @@
 ---
-name: response-citations
+name: kafka-response-citations
 description: >-
   Citation format every agent must attach to findings in its final answer -
   identifies the exact tool call, agent, query parameters, and timestamp

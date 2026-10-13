@@ -3,7 +3,7 @@
 The logs agent reads Kafka broker, KRaft controller and client logs. The tested path is **Grafana Loki** through
 [incu6us/loki-mcp-server](https://github.com/incu6us/loki-mcp-server) (pinned at v0.0.4). If you use something
 else, you keep the agent and **translate one skill** (section 4). Logs are optional: the cluster, metrics and expert
-agents work without them. To run without logs, remove `kafka_logs_agent` and the `loki` connector from the manifest
+agents work without them. To run without logs, remove `kafka_logs_agent` and the `kafka_loki` connector from the manifest
 and delete the logs-agent lines from the orchestrator prompt (`sam/agents/kafka_orchestrator_agent.yaml`) so it does not try to delegate there.
 
 ## 1. Point the MCP at your Loki
@@ -66,10 +66,10 @@ messages, so they translate to any engine.
      for transports and authentication.
    - Others (Elasticsearch, Datadog Logs, CloudWatch Logs, Graylog): search for the vendor's MCP server.
    Run it however it is documented, and prefer a **read-only** credential scoped to the Kafka indexes.
-2. **Replace the connector.** Copy `sam/connectors/loki.yaml` to a new connector (for example `splunk.yaml`),
+2. **Replace the connector.** Copy `sam/connectors/kafka_loki.yaml` to a new connector (for example `splunk.yaml`),
    set `server_url` to your MCP server, set `allow_list` to its search and discovery tools only, and replace
-   `loki` with it in `sam/manifests/example.yaml`. Remove `loki-mcp` from `mcp/docker-compose.yaml` if unused.
-3. **Point the agent at it.** In `sam/agents/kafka_logs_agent.yaml` change `connectors: [loki]` to the new name
+   `kafka_loki` with it in `sam/manifests/*.yaml`. Remove `loki-mcp` from `mcp/docker-compose.yaml` if unused.
+3. **Point the agent at it.** In `sam/agents/kafka_logs_agent.yaml` change the `connectors:` entry `kafka_loki` to the new name
    and replace "Loki", "LogQL" and the label wording in the system prompt with your tool's names. Do the same in
    the logs-agent paragraph of `sam/agents/kafka_orchestrator_agent.yaml`.
 4. **Translate the skill.** Rewrite `sam/skills/kafka-log-queries/SKILL.md`: the **Tools** table (your MCP's
@@ -81,7 +81,7 @@ messages, so they translate to any engine.
    |---|---|---|---|
    | Authentication failures | `{role="broker"} \|~ "Failed authentication"` | `index=kafka role=broker "Failed authentication" \| head 50` | `{"query":{"bool":{"filter":[{"term":{"role":"broker"}},{"match_phrase":{"message":"Failed authentication"}}]}}}` |
 
-5. **Check the citation format.** `sam/skills/response-citations/SKILL.md` shows the logs citation with a `logql=`
+5. **Check the citation format.** `sam/skills/kafka-response-citations/SKILL.md` shows the logs citation with a `logql=`
    field; rename it to your language so citations show the query that was run.
 6. `scripts/apply.sh`, then ask: *"Any authentication or authorization problems on the brokers in the last hour?"*
    and compare the quoted lines with what you see in your log tool.

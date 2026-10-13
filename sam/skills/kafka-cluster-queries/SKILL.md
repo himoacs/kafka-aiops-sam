@@ -31,4 +31,4 @@ You see the **live cluster** through a read-only principal (`mcp-reader`). It ca
 3. **Broker ids:** use `list_brokers` for the id-to-host mapping and `cluster_overview` for the active controller id; never assume ids or host names.
 4. **Report only what the tools return.** If a tool errors with an authorization failure, say that the read-only principal is not permitted to do it; do not retry with other tools to get around it.
 5. **Remediation is advice, not action.** If a fix is warranted, give the exact CLI command (`kafka-consumer-groups.sh --reset-offsets ... --dry-run`, `kafka-reassign-partitions.sh`, `kafka-acls.sh`, `kafka-configs.sh`) for a human to run, and label it as a proposed command that you did not execute.
-6. Load `response-citations` before finalizing. Cite the tool and its key parameters, for example `describe_consumer_group | group_id=payments-consumer, include_offsets=true`.
+6. Load `kafka-response-citations` before finalizing. Cite the tool and its key parameters, for example `describe_consumer_group | group_id=payments-consumer, include_offsets=true`.
