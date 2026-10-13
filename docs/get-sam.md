@@ -60,6 +60,11 @@ lists your other resources as "delete", which is just SAM reporting what is not 
 | `--sam-home PATH` | the desktop app runs with a custom `SAM_HOME` instead of the default |
 | `--url http://host:8800` | a SAM reachable at a URL (for example a team-hosted SAM, or the desktop app's own address, usually `http://127.0.0.1:8800`) |
 | `--target NAME` | a target you created with `sam auth login` |
+| `--allow-overwrite` | proceed even if the plan would overwrite a resource this repo did not create (see below) |
+
+**Safety stop.** Every resource this repo ships is named `kafka_*`, `kafka-*` or `acme-kafka-*`. `scripts/apply.sh` stops before
+applying if the plan would **update** any existing resource with a different name, so it cannot silently replace a
+connector, skill or model you already use. Nothing is changed when it stops.
 
 Equivalent manual command:
 ```bash
