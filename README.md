@@ -57,6 +57,13 @@ The same flow as text:
 
 You supply: a Kafka cluster, a Prometheus with Kafka metrics, optionally a Loki with Kafka logs, and SAM with an LLM already configured.
 
+**Built to be customized.** We wrote and tested the metrics and logs agents against Prometheus and Loki. Your setup
+may use different tools (Splunk, OpenSearch, Datadog, a managed service) or different metric names and labels, and
+the repo is meant to be adapted to them. The tool-specific parts are small and isolated: the MCP server a specialist
+connects to, and one query skill per data source. Adapting means pointing at your MCP server and editing that
+skill, not rebuilding the agents. See [docs/connect-metrics.md](docs/connect-metrics.md) and
+[docs/connect-logs.md](docs/connect-logs.md).
+
 ## Quickstart (about 15 minutes)
 
 Each step ends with how to tell it worked.
