@@ -14,6 +14,12 @@ connect them to what you have.
 
 ## What gets deployed
 
+![Architecture: SAM orchestrator and agents connected through MCP servers to Kafka, Prometheus, Loki, institutional knowledge and Kafka docs](docs/images/architecture.png)
+
+*The architecture we built this for. The orchestrator and four specialists are in this repo; Kafka, Prometheus and Loki are yours (Loki with Grafana Alloy is the tested logging path, see [docs/connect-logs.md](docs/connect-logs.md)). The institutional-knowledge agent in the picture ships here as an example skill, and Slack and the chat UI are the front ends. The ticketing platform is optional and **not part of this repo**.*
+
+The same flow as text:
+
 ```
                   you (SAM web UI, or Slack)
                               |
@@ -72,6 +78,24 @@ Starter prompts: `sam/prompts/` (import with `sam/prompts/import-prompts.sh <SAM
 
 No logging stack, or you use Splunk or OpenSearch? You can run with metrics and cluster access only, or translate one
 skill to your log tool: [docs/connect-logs.md](docs/connect-logs.md).
+
+## What it looks like
+
+**Chat in the SAM app.** Pick `kafka_orchestrator_agent` and start from the suggested prompts.
+
+![SAM chat welcome screen for the Kafka Monitoring Assistant with four suggested prompts](docs/images/sam-chat-welcome.png)
+
+**A grounded answer.** The cluster overview comes from the Kafka MCP server, and every fact carries its source.
+
+![Cluster overview answer showing 3 brokers, 7 topics, 83 partitions and a source line from kafka_cluster_agent](docs/images/cluster-overview-answer.png)
+
+**Slack.** The same agents answer in a Slack thread (optional, see [docs/slack.md](docs/slack.md)). Here the knowledge skill answers an access question for a Java developer; the content is the fictional Acme example.
+
+![Slack thread where the Kafka bot explains what a Java developer needs to provide to get Kafka access](docs/images/slack-thread.png)
+
+**A ticket front end (optional, not included).** We also connected the agents to a service-desk portal where SAM drafts a reply that a human approves before it is published. That portal is a separate demo component and is **not part of this repo**; it is shown to illustrate that the agents can sit behind other front ends.
+
+![Service portal showing a SAM-drafted reply to a consumer-lag ticket waiting for human approval](docs/images/service-portal-draft.png)
 
 ## Design principles
 
