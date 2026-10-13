@@ -1,9 +1,7 @@
 # Get Solace Agent Mesh (SAM) and apply the agents
 
-SAM is the runtime that hosts the agents. It is a separate Solace product: this repo does not include or
-redistribute it. Solace's download page says it is free to try and free for individuals and for companies
-under US$25M in revenue ([download page](https://solace.com/products/agent-mesh/download/); check the page for the
-current terms).
+SAM is the runtime that hosts the agents. SAM Desktop is free to download from
+[Solace's download page](https://solace.com/products/agent-mesh/download/); this repo does not include it.
 
 > **Tested vs documented.** We developed this repo against a SAM 2.385.1 server deployment, and tested `scripts/apply.sh`
 > end to end against the SAM desktop app 2.325.2 on macOS (plan, apply, agents deployed). We did not test the
