@@ -1,0 +1,10 @@
+kind: connector
+name: prometheus
+description: "Prometheus MCP server - run instant and range PromQL queries over Kafka broker, KRaft controller, consumer-lag and host metrics, list metrics and metadata, inspect scrape targets and firing alerts."
+spec:
+  type: mcp
+  subtype: remote
+  values:
+    server_url: "${PROMETHEUS_MCP_URL, http://localhost:9202/mcp}"
+    connection_type: "streamable-http"
+    auth_type: "none"

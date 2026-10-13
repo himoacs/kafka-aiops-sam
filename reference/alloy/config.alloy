@@ -1,0 +1,53 @@
+// REFERENCE ONLY (not deployed by this repo): one way to get Kafka logs into Loki with the labels the
+// kafka-log-queries skill expects: cluster, role (broker | controller | client), service, level.
+// This example discovers Docker containers of a compose project and derives role from the service name.
+// Adapt the project regex, the role rules and the cluster label to your estate, or produce the same four
+// labels with Promtail, Fluent Bit, Vector or the Kubernetes pod labels. See docs/connect-logs.md.
+discovery.docker "kafka" { host = "unix:///var/run/docker.sock" }
+
+discovery.relabel "kafka" {
+  targets = discovery.docker.kafka.targets
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_compose_project"]
+    regex         = "my-kafka-project"
+    action        = "keep"
+  }
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
+    target_label  = "service"
+  }
+  rule {
+    source_labels = ["service"]
+    regex         = "kafka-ctrl-.*"
+    target_label  = "role"
+    replacement   = "controller"
+  }
+  rule {
+    source_labels = ["service"]
+    regex         = "kafka-[0-9]"
+    target_label  = "role"
+    replacement   = "broker"
+  }
+  rule {
+    source_labels = ["service"]
+    regex         = ".*-(producer|consumer)"
+    target_label  = "role"
+    replacement   = "client"
+  }
+}
+
+loki.source.docker "kafka" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = discovery.relabel.kafka.output
+  labels     = {cluster = "my-cluster"}
+  forward_to = [loki.process.kafka.receiver]
+}
+
+loki.process "kafka" {
+  // broker/controller: "[2025-01-01 05:50:36,375] INFO message (class)"; clients: "INFO message"
+  stage.regex { expression = "^(?:\\[[^\\]]+\\] )?(?P<level>TRACE|DEBUG|INFO|WARN|ERROR|FATAL)\\b" }
+  stage.labels { values = {level = "level"} }
+  forward_to = [loki.write.local.receiver]
+}
+
+loki.write "local" { endpoint { url = "http://loki:3100/loki/api/v1/push" } }

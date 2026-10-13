@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Topic Owner",
+    "description": "Topic Owner",
+    "category": null,
+    "command": "topic-owner",
+    "promptText": "Who owns the payments.payment.settled topic, and who approves access to it?",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

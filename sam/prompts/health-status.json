@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Health Status",
+    "description": "Health Status",
+    "category": null,
+    "command": "health-status",
+    "promptText": "How is the Kafka cluster doing right now?",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

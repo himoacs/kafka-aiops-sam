@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Debug Publish Error",
+    "description": "Debug Publish Error",
+    "category": null,
+    "command": "debug-publish-error",
+    "promptText": "Our app got org.apache.kafka.common.errors.TopicAuthorizationException: Not authorized to access topics: [orders.order.created] when publishing. Can you help debug it?",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

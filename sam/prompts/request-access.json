@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Request Kafka Access",
+    "description": "Request Kafka Access",
+    "category": null,
+    "command": "request-access",
+    "promptText": "I would like access to Kafka for my app. What is the procedure?",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

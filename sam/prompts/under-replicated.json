@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Under-replicated Partitions",
+    "description": "Under-replicated Partitions",
+    "category": null,
+    "command": "under-replicated",
+    "promptText": "Are there any under-replicated partitions right now?",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

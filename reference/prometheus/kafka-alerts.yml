@@ -1,0 +1,101 @@
+# REFERENCE ONLY (not deployed by this repo). Alert rules modelled on the Strimzi / community Kafka rule sets.
+# The health-check skill reads firing alerts through the ALERTS series, so it works with any Alertmanager setup as
+# long as your alerts are evaluated by Prometheus. Rules assume scrape jobs named kafka-broker, kafka-controller,
+# kafka-exporter and node, and a 3-controller quorum (see the KRaft quorum rule); edit to match your estate.
+groups:
+  - name: kafka-availability
+    rules:
+      - alert: KafkaBrokerDown
+        expr: up{job="kafka-broker"} == 0
+        for: 1m
+        labels: {severity: critical}
+        annotations: {summary: "Broker {{ $labels.instance }} is down"}
+      - alert: KafkaControllerDown
+        expr: up{job="kafka-controller"} == 0
+        for: 1m
+        labels: {severity: critical}
+        annotations: {summary: "KRaft controller {{ $labels.instance }} is down"}
+      - alert: KafkaControllerQuorumDegraded
+        expr: count(up{job="kafka-controller"} == 1) < 3
+        for: 1m
+        labels: {severity: warning}
+        annotations: {summary: "Fewer than 3 KRaft controllers reachable (quorum has no fault tolerance left)"}
+      - alert: KafkaNoActiveController
+        expr: sum(kafka_controller_kafkacontroller_activecontrollercount) != 1
+        for: 1m
+        labels: {severity: critical}
+        annotations: {summary: "Active controller count is not 1"}
+      - alert: KafkaOfflinePartitions
+        expr: sum(kafka_controller_kafkacontroller_offlinepartitionscount) > 0
+        for: 1m
+        labels: {severity: critical}
+        annotations: {summary: "{{ $value }} partitions are offline (no leader)"}
+      - alert: KafkaOfflineLogDirectory
+        expr: kafka_log_logmanager_offlinelogdirectorycount > 0
+        for: 1m
+        labels: {severity: critical}
+        annotations: {summary: "Broker {{ $labels.instance }} has an offline log directory"}
+  - name: kafka-replication
+    rules:
+      - alert: KafkaUnderReplicatedPartitions
+        expr: sum(kafka_server_replicamanager_underreplicatedpartitions) > 0
+        for: 1m
+        labels: {severity: warning}
+        annotations: {summary: "{{ $value }} under-replicated partitions"}
+      - alert: KafkaUnderMinIsrPartitions
+        expr: sum(kafka_server_replicamanager_underminisrpartitioncount) > 0
+        for: 1m
+        labels: {severity: critical}
+        annotations: {summary: "{{ $value }} partitions below min.insync.replicas (acks=all producers are failing)"}
+      - alert: KafkaIsrShrinking
+        expr: sum(rate(kafka_server_replicamanager_isrshrinkspersec_count[5m])) > 0
+        for: 2m
+        labels: {severity: warning}
+        annotations: {summary: "ISR is shrinking (followers falling out of sync)"}
+  - name: kafka-clients
+    rules:
+      - alert: KafkaConsumerGroupLagHigh
+        expr: kafka_consumergroup_lag_sum > 1000
+        for: 2m
+        labels: {severity: warning}
+        annotations: {summary: "Group {{ $labels.consumergroup }} lag {{ $value }} on {{ $labels.topic }}"}
+      - alert: KafkaConsumerGroupLagGrowing
+        expr: deriv(kafka_consumergroup_lag_sum[5m]) > 5 and kafka_consumergroup_lag_sum > 100
+        for: 3m
+        labels: {severity: warning}
+        annotations: {summary: "Lag of group {{ $labels.consumergroup }} is growing on {{ $labels.topic }}"}
+      - alert: KafkaGroupRebalancing
+        expr: sum(kafka_coordinator_group_numgroupspreparingrebalance) > 0
+        for: 3m
+        labels: {severity: warning}
+        annotations: {summary: "Consumer groups have been rebalancing for 3m+"}
+      - alert: KafkaProduceRequestsFailing
+        expr: sum(rate(kafka_server_brokertopicmetrics_failedproducerequestspersec_count[5m])) > 0
+        for: 2m
+        labels: {severity: warning}
+        annotations: {summary: "Produce requests are failing"}
+      - alert: KafkaAuthenticationFailures
+        expr: sum(increase(kafka_server_socketservermetrics_failed_authentication[5m])) > 0
+        for: 1m
+        labels: {severity: warning}
+        annotations: {summary: "Failed SASL authentications detected"}
+      - alert: KafkaProduceLatencyHigh
+        expr: max(kafka_network_requestmetrics_totaltimems_99thpercentile{request="Produce"}) > 500
+        for: 5m
+        labels: {severity: warning}
+        annotations: {summary: "Produce p99 latency above 500ms"}
+  - name: kafka-capacity
+    rules:
+      - alert: KafkaDiskUsageHigh
+        expr: 1 - node_filesystem_avail_bytes{mountpoint="/",fstype!="tmpfs"} / node_filesystem_size_bytes{mountpoint="/",fstype!="tmpfs"} > 0.85
+        for: 5m
+        labels: {severity: warning}
+        annotations: {summary: "Host disk above 85%"}
+      - alert: KafkaDiskWillFillIn24h
+        expr: |
+          predict_linear(node_filesystem_avail_bytes{mountpoint="/",fstype!="tmpfs"}[6h], 24 * 3600) < 0
+          and
+          node_filesystem_avail_bytes{mountpoint="/",fstype!="tmpfs"} / node_filesystem_size_bytes{mountpoint="/",fstype!="tmpfs"} < 0.4
+        for: 30m
+        labels: {severity: warning}
+        annotations: {summary: "Disk predicted to fill within 24h (and under 40% free; mirrors the community NodeFilesystemSpaceFillingUp guard against one-off steps)"}

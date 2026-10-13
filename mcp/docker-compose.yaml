@@ -1,0 +1,58 @@
+name: kafka-aiops-mcp
+
+# The three MCP servers the SAM agents talk to. They connect OUTWARD to your existing Kafka, Prometheus and Loki.
+# Nothing in this file deploys Kafka or any monitoring.
+#
+# SECURITY: these servers do not authenticate their callers. Host ports are bound to 127.0.0.1 on purpose.
+# Do not publish them on a routable interface without an authenticating proxy in front (docs/security.md).
+#
+# Reaching services on the same machine: use host.docker.internal in the URLs (extra_hosts below makes it
+# work on Linux too). Reaching services on another Docker network: see docs/connect-kafka.md ("Docker networks").
+x-common: &common
+  restart: unless-stopped
+  extra_hosts: ["host.docker.internal:host-gateway"]
+
+services:
+  kafka-mcp:
+    <<: *common
+    image: ghcr.io/tuannvm/kafka-mcp-server:2.0.2
+    environment:
+      MCP_TRANSPORT: http
+      MCP_HTTP_PORT: "8080"
+      KAFKA_BROKERS: ${KAFKA_BROKERS:?set KAFKA_BROKERS in mcp/.env}
+      KAFKA_CLIENT_ID: ${KAFKA_CLIENT_ID:-kafka-mcp-server}
+      KAFKA_SASL_MECHANISM: ${KAFKA_SASL_MECHANISM:-}       # plain | scram-sha-256 | scram-sha-512 | empty = no SASL
+      KAFKA_SASL_USER: ${KAFKA_SASL_USER:-}
+      KAFKA_SASL_PASSWORD: ${KAFKA_SASL_PASSWORD:-}
+      KAFKA_TLS_ENABLE: ${KAFKA_TLS_ENABLE:-false}
+      KAFKA_TLS_INSECURE_SKIP_VERIFY: ${KAFKA_TLS_INSECURE_SKIP_VERIFY:-false}   # development only
+      SSL_CERT_FILE: ${KAFKA_CA_CERT_FILE:-}                # e.g. /certs/ca.pem for a private CA (docs/connect-kafka.md)
+    volumes: ["./certs:/certs:ro"]
+    ports: ["127.0.0.1:9201:8080"]
+
+  prometheus-mcp:
+    <<: *common
+    image: ghcr.io/pab1it0/prometheus-mcp-server:1.6.2
+    environment:
+      PROMETHEUS_URL: ${PROMETHEUS_URL:?set PROMETHEUS_URL in mcp/.env}
+      PROMETHEUS_USERNAME: ${PROMETHEUS_USERNAME:-}
+      PROMETHEUS_PASSWORD: ${PROMETHEUS_PASSWORD:-}
+      PROMETHEUS_TOKEN: ${PROMETHEUS_TOKEN:-}
+      ORG_ID: ${PROMETHEUS_ORG_ID:-}
+      PROMETHEUS_MCP_SERVER_TRANSPORT: http
+      PROMETHEUS_MCP_BIND_HOST: 0.0.0.0
+      PROMETHEUS_MCP_BIND_PORT: "8080"
+    ports: ["127.0.0.1:9202:8080"]
+
+  loki-mcp:
+    <<: *common
+    build: ./loki
+    image: kafka-aiops-loki-mcp:0.0.4
+    environment:
+      LOKI_URL: ${LOKI_URL:?set LOKI_URL in mcp/.env}
+      LOKI_USERNAME: ${LOKI_USERNAME:-}
+      LOKI_PASSWORD: ${LOKI_PASSWORD:-}
+      LOKI_BEARER_TOKEN: ${LOKI_BEARER_TOKEN:-}
+      LOKI_TENANT_ID: ${LOKI_TENANT_ID:-}
+      MCP_HTTP_ADDR: ":8080"
+    ports: ["127.0.0.1:9203:8080"]

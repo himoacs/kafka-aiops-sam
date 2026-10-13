@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Producer Timeouts",
+    "description": "Producer Timeouts",
+    "category": null,
+    "command": "producer-timeouts",
+    "promptText": "Our producer is failing with 'Local: Message timed out'. Can you help debug it?",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Sample Java Client",
+    "description": "Sample Java Client",
+    "category": null,
+    "command": "sample-java",
+    "promptText": "Can you provide a sample Java producer and consumer for our Kafka cluster?",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

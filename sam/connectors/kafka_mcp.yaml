@@ -1,0 +1,14 @@
+kind: connector
+name: kafka_mcp
+description: "Kafka MCP server (tuannvm/kafka-mcp-server) - read-only view of the live cluster: topics, partitions, ISR, configs, consumer groups and per-partition lag, brokers and cluster overview."
+spec:
+  type: mcp
+  subtype: remote
+  values:
+    server_url: "${KAFKA_MCP_URL, http://localhost:9201/mcp}"
+    connection_type: "streamable-http"
+    auth_type: "none"
+    # produce_message and consume_messages are deliberately NOT exposed. Run the MCP server as a describe-only
+    # Kafka principal (reference/acl-readonly.md) so Kafka itself refuses writes; agents should never see tools
+    # they cannot use either.
+    allow_list: "cluster_overview,list_brokers,list_topics,describe_topic,describe_configs,list_consumer_groups,describe_consumer_group"

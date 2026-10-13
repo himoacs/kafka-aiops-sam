@@ -1,0 +1,67 @@
+# kafka-docs corpus manifest
+
+- Source: https://github.com/apache/kafka-site (Apache-2.0), `content/en/42/`
+- Commit: `d0cc96bde945ce6c40ce183b0a140d14fe90fbdc`
+- Kafka version: 4.2
+- Prose pages: 44; reference files: 12; reference entries: 1131
+- Total size: 1154 KB across 56 files
+- Excluded: Kafka Streams docs, protocol message schemas, connect transforms/predicates, mirror configs
+
+## Files
+
+- configuration/admin-configs.md
+- configuration/broker-configs.md
+- configuration/configuration-providers.md
+- configuration/consumer-configs.md
+- configuration/group-configs.md
+- configuration/kafka-connect-configs.md
+- configuration/kafka-streams-configs.md
+- configuration/mirrormaker-configs.md
+- configuration/producer-configs.md
+- configuration/system-properties.md
+- configuration/tiered-storage-configs.md
+- configuration/topic-configs.md
+- design/design.md
+- design/protocol.md
+- getting-started/compatibility.md
+- getting-started/upgrade.md
+- getting-started/zk2kraft.md
+- implementation/distribution.md
+- implementation/log.md
+- implementation/message-format.md
+- implementation/messages.md
+- implementation/network-layer.md
+- kafka-connect/administration.md
+- kafka-connect/connector-development-guide.md
+- kafka-connect/overview.md
+- kafka-connect/user-guide.md
+- operations/basic-kafka-operations.md
+- operations/consumer-rebalance-protocol.md
+- operations/datacenters.md
+- operations/eligible-leader-replicas.md
+- operations/geo-replication-cross-cluster-data-mirroring.md
+- operations/hardware-and-os.md
+- operations/java-version.md
+- operations/kraft.md
+- operations/monitoring.md
+- operations/multi-tenancy.md
+- operations/tiered-storage.md
+- operations/transaction-protocol.md
+- reference/admin-client-configs.md
+- reference/broker-configs.md
+- reference/connect-configs.md
+- reference/consumer-configs.md
+- reference/error-codes.md
+- reference/group-configs.md
+- reference/metrics-connect.md
+- reference/metrics-consumer.md
+- reference/metrics-producer.md
+- reference/producer-configs.md
+- reference/tiered-storage-configs.md
+- reference/topic-configs.md
+- security/authentication-using-sasl.md
+- security/authorization-and-acls.md
+- security/encryption-and-authentication-using-ssl.md
+- security/incorporating-security-features-in-a-running-cluster.md
+- security/listener-configuration.md
+- security/security-overview.md

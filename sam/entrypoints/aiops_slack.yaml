@@ -1,0 +1,14 @@
+kind: entrypoint
+name: aiops_slack
+description: >-
+  Slack entrypoint for the Kafka AIOps assistant. Users DM the AIOps-Kafka bot in the
+  workspace; messages go to the Kafka Orchestrator Agent and the answer comes back
+  in the same Slack thread. Socket Mode: outbound only, no public URL.
+spec:
+  type: slack
+  deploy: true
+  values:
+    default_agent_name: kafka_orchestrator_agent
+    # Tokens come from sam/.env at apply time (see docs/slack.md). Optional: remove this entrypoint from the manifest to skip Slack.
+    bot_token: ${SLACK_BOT_TOKEN}
+    app_token: ${SLACK_APP_TOKEN}

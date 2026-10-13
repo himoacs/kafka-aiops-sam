@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Cluster Overview",
+    "description": "Cluster Overview",
+    "category": null,
+    "command": "cluster-overview",
+    "promptText": "How many brokers, topics and partitions are there on the Kafka cluster? Give me a quick overview.",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

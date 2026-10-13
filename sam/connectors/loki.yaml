@@ -1,0 +1,10 @@
+kind: connector
+name: loki
+description: "Loki MCP server - run LogQL queries over Kafka broker, controller and client application logs; discover labels, label values and log streams."
+spec:
+  type: mcp
+  subtype: remote
+  values:
+    server_url: "${LOKI_MCP_URL, http://localhost:9203/mcp}"
+    connection_type: "streamable-http"
+    auth_type: "none"

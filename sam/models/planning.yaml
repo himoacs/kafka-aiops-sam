@@ -1,0 +1,12 @@
+kind: model
+name: planning
+description: Planning-purpose model configuration.
+spec:
+  provider: ${LLM_SERVICE_PROVIDER}
+  modelName: ${LLM_SERVICE_PLANNING_MODEL_NAME}
+  apiBase: ${LLM_SERVICE_ENDPOINT}
+  authConfig:
+    type: apikey
+    api_key: ${LLM_SERVICE_API_KEY}
+  modelParams:
+    cache_strategy: 5m

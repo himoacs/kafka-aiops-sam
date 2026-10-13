@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Topic Details",
+    "description": "Topic Details",
+    "category": null,
+    "command": "topic-details",
+    "promptText": "Describe the topic orders.order.created: partitions, replication factor, ISR and its key configs.",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

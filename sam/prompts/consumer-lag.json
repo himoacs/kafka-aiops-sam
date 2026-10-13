@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Consumer Lag",
+    "description": "Consumer Lag",
+    "category": null,
+    "command": "consumer-lag",
+    "promptText": "Which consumer groups are lagging, and why?",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

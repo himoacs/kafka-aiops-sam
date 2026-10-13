@@ -1,0 +1,5 @@
+# Pinned source for the kafka-docs skill corpus (Apache Kafka docs, Apache-2.0)
+REPO=https://github.com/apache/kafka-site.git
+SHA=d0cc96bde945ce6c40ce183b0a140d14fe90fbdc
+KAFKA_VERSION=4.2
+VERSION_DIR=42

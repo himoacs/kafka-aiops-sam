@@ -1,0 +1,107 @@
+# REFERENCE (not deployed by this repo). The metric names the metrics skill queries come from these rules.
+# See docs/connect-metrics.md for how to use them, or map your own names.
+# JMX exporter rules for Kafka brokers and KRaft controllers. Adapted from the Strimzi/Prometheus community
+# rule sets; metric names follow kafka_<group>_<name> so existing community alerts/dashboards map cleanly.
+lowercaseOutputName: true
+rules:
+  # Broker: per-topic and aggregate throughput / message rates
+  - pattern: kafka.server<type=BrokerTopicMetrics, name=(BytesInPerSec|BytesOutPerSec|MessagesInPerSec|TotalProduceRequestsPerSec|TotalFetchRequestsPerSec|FailedProduceRequestsPerSec|FailedFetchRequestsPerSec), topic=(.+)><>(Count|OneMinuteRate)
+    name: kafka_server_brokertopicmetrics_$1_$3
+    labels: {topic: "$2"}
+    type: GAUGE
+  - pattern: kafka.server<type=BrokerTopicMetrics, name=(BytesInPerSec|BytesOutPerSec|MessagesInPerSec|TotalProduceRequestsPerSec|TotalFetchRequestsPerSec|FailedProduceRequestsPerSec|FailedFetchRequestsPerSec)><>(Count|OneMinuteRate)
+    name: kafka_server_brokertopicmetrics_$1_$2
+    type: GAUGE
+  # Replication health
+  - pattern: kafka.server<type=ReplicaManager, name=(UnderReplicatedPartitions|UnderMinIsrPartitionCount|AtMinIsrPartitionCount|PartitionCount|LeaderCount|OfflineReplicaCount|ReassigningPartitions)><>Value
+    name: kafka_server_replicamanager_$1
+    type: GAUGE
+  - pattern: kafka.server<type=ReplicaManager, name=(IsrShrinksPerSec|IsrExpandsPerSec)><>(Count|OneMinuteRate)
+    name: kafka_server_replicamanager_$1_$2
+    type: GAUGE
+  - pattern: kafka.server<type=ReplicaFetcherManager, name=MaxLag, clientId=(.+)><>Value
+    name: kafka_server_replicafetchermanager_maxlag
+    labels: {clientId: "$1"}
+    type: GAUGE
+  - pattern: kafka.cluster<type=Partition, name=(UnderReplicated|UnderMinIsr|AtMinIsr), topic=(.+), partition=(.+)><>Value
+    name: kafka_cluster_partition_$1
+    labels: {topic: "$2", partition: "$3"}
+    type: GAUGE
+  # Per-partition log size / offsets (hot partition and disk analysis)
+  - pattern: kafka.log<type=Log, name=(Size|LogEndOffset|LogStartOffset), topic=(.+), partition=(.+)><>Value
+    name: kafka_log_log_$1
+    labels: {topic: "$2", partition: "$3"}
+    type: GAUGE
+  - pattern: kafka.log<type=LogManager, name=OfflineLogDirectoryCount><>Value
+    name: kafka_log_logmanager_offlinelogdirectorycount
+    type: GAUGE
+  # Request latency and queues
+  - pattern: kafka.network<type=RequestMetrics, name=(TotalTimeMs|RequestQueueTimeMs|LocalTimeMs|RemoteTimeMs|ResponseSendTimeMs), request=(Produce|FetchConsumer|FetchFollower|Fetch|Metadata|OffsetCommit|JoinGroup|SyncGroup|Heartbeat)><>(Count|50thPercentile|99thPercentile|Mean)
+    name: kafka_network_requestmetrics_$1_$3
+    labels: {request: "$2"}
+    type: GAUGE
+  - pattern: kafka.network<type=RequestMetrics, name=ErrorsPerSec, request=(.+), error=(.+)><>Count
+    name: kafka_network_requestmetrics_errorspersec_count
+    labels: {request: "$1", error: "$2"}
+    type: COUNTER
+  - pattern: kafka.network<type=RequestChannel, name=(RequestQueueSize|ResponseQueueSize)><>Value
+    name: kafka_network_requestchannel_$1
+    type: GAUGE
+  - pattern: kafka.network<type=SocketServer, name=NetworkProcessorAvgIdlePercent><>Value
+    name: kafka_network_socketserver_networkprocessoravgidlepercent
+    type: GAUGE
+  - pattern: kafka.server<type=KafkaRequestHandlerPool, name=RequestHandlerAvgIdlePercent><>OneMinuteRate
+    name: kafka_server_kafkarequesthandlerpool_requesthandleravgidlepercent
+    type: GAUGE
+  # Quotas / throttling
+  - pattern: kafka.server<type=(Produce|Fetch|Request), user=(.*), client-id=(.*)><>(throttle-time|byte-rate|request-time)
+    name: kafka_server_quota_$1_$4
+    labels: {user: "$2", clientId: "$3"}
+    type: GAUGE
+  # Consumer group coordinator
+  - pattern: kafka.coordinator.group<type=GroupMetadataManager, name=(NumGroups|NumGroupsPreparingRebalance|NumGroupsCompletingRebalance|NumGroupsStable|NumGroupsEmpty|NumGroupsDead|NumOffsets)><>Value
+    name: kafka_coordinator_group_$1
+    type: GAUGE
+  - pattern: kafka.server<type=group-coordinator-metrics, name=(.*)><>(.*)
+    name: kafka_server_groupcoordinator_$1
+    type: GAUGE
+  - pattern: kafka.server<type=group-coordinator-metrics><>(rebalance-rate|rebalance-total|group-count|consumer-group-count|consumer-group-rebalance-rate|consumer-group-rebalance-count)
+    name: kafka_server_groupcoordinator_$1
+    type: GAUGE
+  # Transactions
+  - pattern: kafka.coordinator.transaction<type=(.+), name=(.+)><>(Count|Value)
+    name: kafka_coordinator_transaction_$1_$2
+    type: GAUGE
+  # KRaft controller + quorum
+  - pattern: kafka.controller<type=KafkaController, name=(ActiveControllerCount|OfflinePartitionsCount|GlobalPartitionCount|GlobalTopicCount|PreferredReplicaImbalanceCount|ActiveBrokerCount|FencedBrokerCount|MetadataErrorCount)><>Value
+    name: kafka_controller_kafkacontroller_$1
+    type: GAUGE
+  - pattern: kafka.controller<type=ControllerStats, name=(UncleanLeaderElectionsPerSec|LeaderElectionRateAndTimeMs)><>(Count|OneMinuteRate)
+    name: kafka_controller_controllerstats_$1_$2
+    type: GAUGE
+  - pattern: kafka.server<type=raft-metrics><>(current-state|current-leader|current-vote|current-epoch|high-watermark|log-end-offset|number-unknown-voter-connections|poll-idle-ratio-avg|commit-latency-avg|election-latency-avg|fetch-records-rate|append-records-rate)
+    name: kafka_server_raftmetrics_$1
+    type: GAUGE
+  - pattern: kafka.server<type=raft-channel-metrics><>(connection-count|request-error-count)
+    name: kafka_server_raftchannelmetrics_$1
+    type: GAUGE
+  - pattern: kafka.server<type=broker-metadata-metrics><>(.+)
+    name: kafka_server_brokermetadata_$1
+    type: GAUGE
+  # Log flush / cleaner / purgatory
+  - pattern: kafka.log<type=LogFlushStats, name=LogFlushRateAndTimeMs><>(Count|99thPercentile)
+    name: kafka_log_logflushstats_logflushrateandtimems_$1
+    type: GAUGE
+  - pattern: kafka.log<type=LogCleaner, name=(max-dirty-percent|time-since-last-run-ms|max-clean-time-secs)><>Value
+    name: kafka_log_logcleaner_$1
+    type: GAUGE
+  - pattern: kafka.server<type=DelayedOperationPurgatory, name=PurgatorySize, delayedOperation=(.+)><>Value
+    name: kafka_server_delayedoperationpurgatory_purgatorysize
+    labels: {delayedOperation: "$1"}
+    type: GAUGE
+  # Client connections / auth failures
+  - pattern: kafka.server<type=socket-server-metrics, listener=(.+), networkProcessor=(.+)><>(connection-count|failed-authentication-total|successful-authentication-total|connection-close-total)
+    name: kafka_server_socketservermetrics_$3
+    labels: {listener: "$1", networkProcessor: "$2"}
+    type: GAUGE
+  # JVM comes from the agent's built-in collectors (jvm_*, process_*)

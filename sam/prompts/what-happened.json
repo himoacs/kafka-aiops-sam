@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "What Happened",
+    "description": "What Happened",
+    "category": null,
+    "command": "what-happened",
+    "promptText": "What happened on the Kafka cluster in the last 24 hours? Summarize any incidents with their timing.",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

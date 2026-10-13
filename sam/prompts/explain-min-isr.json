@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Explain min.insync.replicas",
+    "description": "Explain min.insync.replicas",
+    "category": null,
+    "command": "explain-min-isr",
+    "promptText": "What does min.insync.replicas do, and is ours different from the default?",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}

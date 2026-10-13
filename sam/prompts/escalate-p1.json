@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-10-09T00:00:00Z",
+  "prompt": {
+    "name": "Escalate P1",
+    "description": "Escalate P1",
+    "category": null,
+    "command": "escalate-p1",
+    "promptText": "Producers are failing because two brokers are down. What severity is this and who do I page?",
+    "metadata": {
+      "originalCreatedAt": 1791500000000,
+      "originalVersion": 1
+    }
+  }
+}
