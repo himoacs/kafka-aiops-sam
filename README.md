@@ -14,13 +14,17 @@ connect them to what you have.
 
 ## About Solace Agent Mesh (SAM)
 
-[Solace Agent Mesh](https://solace.com/products/agent-mesh/) is an agent runtime and development platform. It makes
-creating agents, and giving them access to MCP servers, skills and tools, extremely simple. It also includes several
-out-of-the-box integrations and triggers, such as Slack, WhatsApp, Teams and webhooks, so the same agents can be
-reached from the places your team already works.
+[Solace Agent Mesh](https://solace.com/products/agent-mesh/) is an agent development and runtime platform. You
+describe an agent, meaning its instructions, the MCP servers it may call, and the skills and tools it can use, and
+SAM runs it, manages the conversation, and lets agents delegate work to one another. There is no agent code to write.
 
-This repo uses SAM as the runtime: the agents, skills and connectors here are SAM resources, and the MCP servers
-are what SAM's agents call to reach your Kafka, metrics and logs.
+People and systems reach the agents through SAM's built-in entrypoints: a web chat UI, Slack, Microsoft Teams, email,
+webhooks, an MCP endpoint, and WhatsApp (early access). The same agents can therefore answer wherever your team
+already works, without rebuilding them for each channel.
+
+In this repo the agents, skills and connectors are plain YAML and Markdown that SAM applies and runs. The agents call
+MCP servers to reach your Kafka cluster, metrics and logs. SAM is a separate Solace product and is not included here;
+[docs/get-sam.md](docs/get-sam.md) shows how to get it and apply this configuration.
 
 ## What gets deployed
 
