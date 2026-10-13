@@ -1,0 +1,37 @@
+kind: manifest
+name: kafka-aiops-models-slack
+description: example.yaml plus the models and the Slack entrypoint.
+variables:
+  LLM_SERVICE_PROVIDER: ${LLM_SERVICE_PROVIDER}
+  LLM_SERVICE_ENDPOINT: ${LLM_SERVICE_ENDPOINT}
+  LLM_SERVICE_GENERAL_MODEL_NAME: ${LLM_SERVICE_GENERAL_MODEL_NAME}
+  LLM_SERVICE_PLANNING_MODEL_NAME: ${LLM_SERVICE_PLANNING_MODEL_NAME}
+  # Set these in sam/.env (copy sam/.env.example); scripts/apply.sh loads that file.
+  KAFKA_MCP_URL: ${KAFKA_MCP_URL, http://localhost:9201/mcp}
+  PROMETHEUS_MCP_URL: ${PROMETHEUS_MCP_URL, http://localhost:9202/mcp}
+  LOKI_MCP_URL: ${LOKI_MCP_URL, http://localhost:9203/mcp}
+resources:
+  models:
+    - general
+    - planning
+  connectors:
+    - kafka_mcp
+    - prometheus
+    - loki
+  skills:
+    - kafka-docs
+    - kafka-health-check
+    - consumer-lag-troubleshoot
+    - acme-kafka-knowledge
+    - kafka-metrics-queries
+    - kafka-log-queries
+    - kafka-cluster-queries
+    - response-citations
+  agents:
+    - kafka_orchestrator_agent
+    - kafka_metrics_agent
+    - kafka_logs_agent
+    - kafka_cluster_agent
+    - kafka_expert_agent
+  entrypoints:
+    - aiops_slack

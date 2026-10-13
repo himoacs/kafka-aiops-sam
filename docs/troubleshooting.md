@@ -4,9 +4,11 @@
 
 | Symptom | Cause and fix |
 |---|---|
+| "--target desktop: no running SAM desktop app found" | Open the desktop app and wait for its window to load, then retry. If the app runs with a custom `SAM_HOME`, pass `--sam-home <path>`; or pass the app's address with `--url http://127.0.0.1:8800`. An old `sam` on your `PATH` can also be the cause; the script prefers the app's own CLI, and you can force one with `SAM_CLI=/path/to/sam`. |
 | "Could not find the sam CLI" | Install the SAM desktop app and see [get-sam.md](get-sam.md) step 2, or set `SAM_CLI=/path/to/sam`. |
 | JSON decode error from `sam config ...` | CLI older or newer than the SAM server. Use the CLI that matches your SAM version (the one bundled with your SAM install). |
-| "Fill these in sam/.env first" | Set the listed `LLM_SERVICE_*` (and Slack) variables. |
+| "Set these in sam/.env first" | Only needed with `--with-models` (LLM settings) or `--with-slack` (tokens): copy `sam/.env.example` to `sam/.env` and fill in the listed variables. |
+| Agents answer "no model" or fail to start | Your SAM has no `general`/`planning` model. Configure one in SAM, or use `--with-models` ([get-sam.md](get-sam.md#models)). |
 | Plan shows the same agents as "update" every time | Known quirk with skill references; harmless. |
 | Plan wants to delete `Orchestrator` or `Activity Monitor` | Those are SAM's built-ins. Never pass `--prune`; the script does not. |
 | "MCP not reachable" warning | The MCP containers are not running or SAM cannot reach them. See below. |

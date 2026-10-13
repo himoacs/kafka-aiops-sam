@@ -8,7 +8,7 @@ Socket Mode: the connection goes **outbound** from SAM to Slack, so no public UR
    a Bot token (`xoxb-...`) with the scopes that page lists, and an App-level token (`xapp-...`) with the
    `connections:write` scope. Scopes differ between Solace's pages and community posts, so use the current
    official list.
-2. Put the tokens in `sam/.env` as `SLACK_BOT_TOKEN` and `SLACK_APP_TOKEN`.
+2. Copy `sam/.env.example` to `sam/.env` and set `SLACK_BOT_TOKEN` and `SLACK_APP_TOKEN`.
 3. `scripts/apply.sh --with-slack`.
 4. Message the bot. It routes to `kafka_orchestrator_agent` (`sam/entrypoints/aiops_slack.yaml`).
 

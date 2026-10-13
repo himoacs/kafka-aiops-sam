@@ -1,19 +1,12 @@
 kind: manifest
 name: kafka-aiops
-description: Kafka AIOps agents and MCP connectors. Apply with scripts/apply.sh (see docs/get-sam.md).
+description: Kafka AIOps agents, skills and MCP connectors. Uses the model(s) already configured in your SAM; add --with-models to also create them. Apply with scripts/apply.sh (see docs/get-sam.md).
 variables:
   # Set these in sam/.env (copy sam/.env.example); scripts/apply.sh loads that file.
-  LLM_SERVICE_PROVIDER: ${LLM_SERVICE_PROVIDER}
-  LLM_SERVICE_ENDPOINT: ${LLM_SERVICE_ENDPOINT}
-  LLM_SERVICE_GENERAL_MODEL_NAME: ${LLM_SERVICE_GENERAL_MODEL_NAME}
-  LLM_SERVICE_PLANNING_MODEL_NAME: ${LLM_SERVICE_PLANNING_MODEL_NAME}
   KAFKA_MCP_URL: ${KAFKA_MCP_URL, http://localhost:9201/mcp}
   PROMETHEUS_MCP_URL: ${PROMETHEUS_MCP_URL, http://localhost:9202/mcp}
   LOKI_MCP_URL: ${LOKI_MCP_URL, http://localhost:9203/mcp}
 resources:
-  models:
-    - general
-    - planning
   connectors:
     - kafka_mcp
     - prometheus

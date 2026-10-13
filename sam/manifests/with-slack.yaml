@@ -1,19 +1,12 @@
 kind: manifest
 name: kafka-aiops-slack
-description: Kafka AIOps agents and MCP connectors, plus the Slack entrypoint (needs SLACK_BOT_TOKEN and SLACK_APP_TOKEN, see docs/slack.md). Apply with scripts/apply.sh (see docs/get-sam.md).
+description: Same as example.yaml plus the Slack entrypoint (needs SLACK_BOT_TOKEN and SLACK_APP_TOKEN, see docs/slack.md).
 variables:
   # Set these in sam/.env (copy sam/.env.example); scripts/apply.sh loads that file.
-  LLM_SERVICE_PROVIDER: ${LLM_SERVICE_PROVIDER}
-  LLM_SERVICE_ENDPOINT: ${LLM_SERVICE_ENDPOINT}
-  LLM_SERVICE_GENERAL_MODEL_NAME: ${LLM_SERVICE_GENERAL_MODEL_NAME}
-  LLM_SERVICE_PLANNING_MODEL_NAME: ${LLM_SERVICE_PLANNING_MODEL_NAME}
   KAFKA_MCP_URL: ${KAFKA_MCP_URL, http://localhost:9201/mcp}
   PROMETHEUS_MCP_URL: ${PROMETHEUS_MCP_URL, http://localhost:9202/mcp}
   LOKI_MCP_URL: ${LOKI_MCP_URL, http://localhost:9203/mcp}
 resources:
-  models:
-    - general
-    - planning
   connectors:
     - kafka_mcp
     - prometheus

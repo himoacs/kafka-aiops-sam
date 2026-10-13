@@ -35,7 +35,7 @@ connect them to what you have.
 | 3 MCP servers | read-only access to Kafka, Prometheus and Loki, run with Docker Compose | `mcp/` |
 | Reference configs | what the skills assume about your metrics and logs. **Not deployed.** | `reference/` |
 
-You supply: a Kafka cluster, a Prometheus with Kafka metrics, optionally a Loki with Kafka logs, an LLM API key, and SAM.
+You supply: a Kafka cluster, a Prometheus with Kafka metrics, optionally a Loki with Kafka logs, and SAM with an LLM already configured. Nothing here needs a message broker of your own.
 
 ## Quickstart (about 15 minutes)
 
@@ -59,11 +59,12 @@ mcp/scripts/mcp-smoke.sh http://localhost:9201/mcp cluster_overview
 ```
 *Works when:* the tool list shows `cluster_overview`, `list_topics`, ... and the call returns your brokers.
 
-**4. Apply the agents to SAM.**
+**4. Apply the agents to SAM.** Open the SAM desktop app first and wait for its window to load.
 ```bash
-cp sam/.env.example sam/.env      # set LLM_SERVICE_* (your model endpoint and key)
 scripts/apply.sh                  # shows a plan, asks to continue, then applies
 ```
+It adds 5 agents, 3 connectors and 8 skills and changes nothing else (no deletes, no model changes). The agents use
+the model your SAM already has; if yours has none, see [docs/get-sam.md](docs/get-sam.md#models).
 *Works when:* it ends with "Done" and SAM lists `kafka_orchestrator_agent`.
 
 **5. Ask.** Open SAM, choose `kafka_orchestrator_agent`, and try: *"Give me a quick overview of the Kafka cluster."*
@@ -86,7 +87,7 @@ skill to your log tool: [docs/connect-logs.md](docs/connect-logs.md).
 Everything here was exercised against Apache Kafka 4.2.2 (KRaft, SASL_SSL/SCRAM) with SAM 2.385.1,
 tuannvm/kafka-mcp-server 2.0.2, pab1it0/prometheus-mcp-server 1.6.2 and incu6us/loki-mcp-server 0.0.4, with
 Prometheus and Loki. **Not tested:** other Kafka versions and managed services, Prometheus metric names from
-exporters other than the ones in `reference/`, OpenSearch or Splunk, and the SAM desktop installer path. Those
+exporters other than the ones in `reference/`, OpenSearch or Splunk, installing SAM itself, and Windows or Linux. `scripts/apply.sh` was tested against the SAM desktop app 2.325.2 on macOS. Those
 areas are documented as adaptation guides and labeled as such.
 
 ## Layout
