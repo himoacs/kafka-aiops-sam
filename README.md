@@ -23,8 +23,8 @@ webhooks, an MCP endpoint, and WhatsApp (early access). The same agents can ther
 already works, without rebuilding them for each channel.
 
 In this repo the agents, skills and connectors are plain YAML and Markdown that SAM applies and runs. The agents call
-MCP servers to reach your Kafka cluster, metrics and logs. SAM is a separate Solace product and is not included here;
-[docs/get-sam.md](docs/get-sam.md) shows how to get it and apply this configuration.
+MCP servers to reach your Kafka cluster, metrics and logs. SAM itself is not included in this repo, but you can download SAM Desktop for free: follow the
+instructions in [docs/get-sam.md](docs/get-sam.md), which also shows how to apply this configuration.
 
 ## What gets deployed
 
